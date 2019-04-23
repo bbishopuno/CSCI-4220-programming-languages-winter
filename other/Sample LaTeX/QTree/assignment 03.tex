@@ -1,0 +1,188 @@
+% Nathan Schulte - nmschulte@unomaha.edu
+% Copyright 2012 Nathan Schulte
+
+\documentclass{article}
+
+\textheight=9.1in
+\textwidth=6.6in
+\topmargin=0.0in
+\headheight=0.0in
+\headsep=0.0in
+\oddsidemargin=-0.19in
+
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage{tikz}
+\usepackage{tikz-qtree}
+
+\usetikzlibrary{arrows,automata,positioning}
+
+\let\oldemptyset\emptyset
+\let\emptyset\varnothing
+
+\begin{document}
+
+\title{Assignment 03}
+\date{}
+\author{Nathan Schulte \\ \texttt{nmschulte@unomaha.edu}}
+\maketitle
+
+%----------------
+\subsection*{Problem 1.}
+%----------------
+
+\begin{align*}
+  S &\rightarrow \texttt{1}\:|\:\texttt{0}\:|\:\texttt{1}A\texttt{1}\:|\:\texttt{0}A\texttt{0}\\
+  A &\rightarrow \texttt{1}\:|\:\texttt{0}\:|\:\varepsilon\:|\:AA
+\end{align*}
+
+
+%----------------
+\subsection*{Problem 2.}
+%----------------
+
+\begin{enumerate}
+  \item Make a new start variable.\\
+    \begin{align*}
+      S &\rightarrow A\\
+      A &\rightarrow BAB\:|\:B\:|\:\varepsilon\\
+      B &\rightarrow \texttt{00}\:|\:\varepsilon
+    \end{align*}
+  \item Remove \(\varepsilon\)-rules.\\
+    \begin{align*}
+      S &\rightarrow A\:|\:\varepsilon\\
+      A &\rightarrow BAB\:|\:B\:|\:BB\:|\:A\:|\:AB\:|\:BA\\
+      B &\rightarrow \texttt{00}
+    \end{align*}
+  \item Remove unit rules.\\
+    \begin{align*}
+      S &\rightarrow BAB\:|\:\texttt{00}\:|\:BB\:|\:AB\:|\:BA\:|\:\varepsilon\\
+      A &\rightarrow BAB\:|\:\texttt{00}\:|\:BB\:|\:AB\:|\:BA\\
+      B &\rightarrow \texttt{00}
+    \end{align*}
+  \item Convert rules into proper form.\\
+    \begin{align*}
+      S &\rightarrow BU\:|\:VV\:|\:BB\:|\:AB\:|\:BA\:|\:\varepsilon\\
+      A &\rightarrow BU\:|\:VV\:|\:BB\:|\:AB\:|\:BA\\
+      B &\rightarrow VV\\
+      U &\rightarrow AB\\
+      V &\rightarrow \texttt{0}
+    \end{align*}
+\end{enumerate}
+
+
+%----------------
+\subsection*{Problem 3.}
+%----------------
+
+\(G = \left(\left\{S\right\}, \left\{\texttt{0}\right\}, R, S\right)\).  The set of rules, \(R\), is
+  \begin{align*}
+    S &\rightarrow \texttt{0}.
+  \end{align*}
+Adding the rule \(S \rightarrow SS\) yields the grammer \(G'\) with the set of rules
+  \begin{align*}
+    S &\rightarrow \texttt{0}\:|\:SS
+  \end{align*}
+\(G'\) does not generate \(A^*\), where \(A = L\left(G\right)\); it is missing the empty string, \(\lambda\).
+
+
+%----------------
+\subsection*{Problem 4.}
+%----------------
+
+\begin{enumerate}
+  \item All strings, i.e. \(\Sigma^*\), of the alphabet \(\left\{\texttt{a}, \texttt{b}\right\}\), except those of the form \(\texttt{a}^n\texttt{b}^n\).
+  \item \(G_2 = \left(\left\{S\right\}, \left\{\texttt{a}, \texttt{b}\right\}, R, S\right)\).  The set of rules, \(R\), is
+    \begin{align*}
+      S &\rightarrow \texttt{a}S\texttt{b}\:|\:\varepsilon.
+    \end{align*}
+\end{enumerate}
+
+
+%----------------
+\subsection*{Problem 5.}
+%----------------
+
+\begin{enumerate}
+  \item The string \texttt{if condition then if condition then x := 0 else x := 0} is derived ambiguously by the grammer \(G\).
+  \begin{center}
+    \Tree [.STMT
+            [.IF\_THEN
+              [.\texttt{if} ]
+              [.\texttt{condition} ]
+              [.\texttt{then} ]
+              [.STMT
+                [.IF\_THEN\_ELSE
+                  [.\texttt{if} ]
+                  [.\texttt{condition} ]
+                  [.\texttt{then} ]
+                  [.STMT
+                    [.ASSIGN
+                      [.\texttt{x} ]
+                      [.\texttt{:=} ]
+                      [.\texttt{0} ] ] ]
+                 [.\texttt{else} ]
+                 [.STMT
+                   [.ASSIGN
+                     [.\texttt{x} ]
+                     [.\texttt{:=} ]
+                     [.\texttt{0} ] ] ] ] ] ] ] \\
+    \Tree [.STMT
+            [.IF\_THEN\_ELSE
+              [.\texttt{if} ]
+              [.\texttt{condition} ]
+              [.\texttt{then} ]
+              [.STMT
+                [.IF\_THEN
+                  [.\texttt{if} ]
+                  [.\texttt{condition} ]
+                  [.\texttt{then} ]
+                  [.STMT
+                    [.ASSIGN
+                      [.\texttt{x} ]
+                      [.\texttt{:=} ]
+                      [.\texttt{0} ] ] ] ] ]
+              [.\texttt{else} ]
+              [.STMT
+                [.ASSIGN
+                  [.\texttt{x} ]
+                  [.\texttt{:=} ]
+                  [.\texttt{0} ] ] ] ] ]
+  \end{center}
+  \item \(G = \left(V, \Sigma, R, \mathrm{STMT}\right)\), where
+  \begin{enumerate}
+    \item \(V = \left\{\mathrm{STMT}, \mathrm{ASSIGN}, \mathrm{MATCHED}, \mathrm{UNMATCHED}\right\}\)
+    \item \(\Sigma = \left\{\texttt{if}, \texttt{condition}, \texttt{then}, \texttt{else}, \texttt{x}, \texttt{:=}, \texttt{0}\right\}\)
+    \item the set of rules, \(R\), is
+    \begin{align*}
+      \mathrm{STMT} \rightarrow&\:\mathrm{ASSIGN}\\
+      |&\:\mathrm{MATCHED}\\
+      |&\:\mathrm{UNMATCHED}\\
+      \mathrm{MATCHED} \rightarrow&\:\texttt{if condition then }\mathrm{MATCHED} \texttt{ else } \mathrm{MATCHED}\\
+      |&\:\mathrm{ASSIGN}\\
+      \mathrm{UNMATCHED} \rightarrow&\:\texttt{if condition then } \mathrm{STMT}\\
+      |&\:\texttt{if condition then } \mathrm{MATCHED} \texttt{ else } \mathrm{STMT}\\
+      \mathrm{ASSIGN} \rightarrow&\: \texttt{x := 0}
+    \end{align*}
+  \end{enumerate}
+\end{enumerate}
+
+
+%----------------
+\subsection*{Problem 6.}
+%----------------
+
+\begin{enumerate}
+  \item \(L\left(G\right) = L\)
+  \item Let \(k\) be the pumping lemma length given by the pumping lemma.
+  \item \(z = \texttt{0}^{k}\texttt{1}\texttt{0}^{2k}\texttt{1}\texttt{0}^{3k} \in L\)
+  \item \(z = uvwxy \wedge vx \neq \lambda \wedge \left|vwx\right| \leq k\)
+  \item Case 1: \(vx\) is all \texttt{0}s before the first \texttt{1}.  In this case, the relationship between the sets of \texttt{0}s does not hold; the ratios are no longer \(1:2:3\).\\
+  Case 2: \(vx\) contains the first \texttt{1}.  In this case, when pumping up or down, the number of \texttt{1}s is no longer two.\\
+  Case 3: \(vx\) is all \texttt{0}s from the middle set of \texttt{0}s.  In this case, the relationship between the sets of \texttt{0}s does not hold; the ratios are no longer \(1:2:3\).\\
+  Case 4: \(vx\) contains the second \texttt{1}.  In this case, when pumping up or down, the number of \texttt{1}s is no longer two.\\
+  Case 5: \(vx\) is all \texttt{0}s from the after the last \texttt{1}.  In this case, the relationship between the sets of \texttt{0}s does not hold; the ratios are no longer \(1:2:3\).\\
+\end{enumerate}
+
+
+\end{document}
